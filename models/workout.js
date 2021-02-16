@@ -5,7 +5,7 @@ const workoutSchema = new Schema({
   day: {
     type: Date,
     required: true,
-    deault: () => new Date(),
+    deault: Date.now,
   },
 
   exercises: [
