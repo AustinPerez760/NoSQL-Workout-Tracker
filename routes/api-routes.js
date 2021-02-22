@@ -1,27 +1,28 @@
 const Workout = require("../models/workout.js");
+const path = require("path");
 // const router = require("express").Router();
 
 module.exports = function (app) {
-  // All workouts
-  // app.get("/api/workouts", (req, res) => {
-  //   Workout.aggregate([
-  //     {
-  //       $addFields: {
-  //         totalDuration: {
-  //           $sum: "$exercises.duration",
-  //         },
-  //       },
-  //     },
-  //   ])
-  //     .then((dbWorkout) => {
-  //       console.log(dbWorkouts);
-  //       res.json(dbWorkout);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       res.json(err);
-  //     });
-  // });
+  //All workouts
+  app.get("/api/workouts", (req, res) => {
+    Workout.aggregate([
+      {
+        $addFields: {
+          totalDuration: {
+            $sum: "$exercises.duration",
+          },
+        },
+      },
+    ])
+      .then((workouts) => {
+        console.log(workouts);
+        res.json(workouts);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json(err);
+      });
+  });
 
   app.get("/api/workouts", (req, res) => {
     Workout.find()
@@ -33,6 +34,18 @@ module.exports = function (app) {
       });
   });
 
+  //Create new workout
+  app.post("/api/workouts", (req, res) => {
+    Workout.create({})
+      .then((data) => res.json(data))
+      .catch((err) => {
+        console.log(err);
+        res.json(err);
+      });
+  });
+
+  //Put Routes
+
   app.put("/api/workouts/:id", (req, res) => {
     Workout.findByIdAndUpdate(req.params.id, {
       $push: { exercises: req.body },
@@ -42,17 +55,24 @@ module.exports = function (app) {
         res.json(result);
       })
       .catch((err) => {
-        res.status(400).json(err);
+        res.json(err);
       });
   });
 
-  //Create new workout
-  app.post("/api/workouts", (req, res) => {
-    Workout.create({})
-      .then((data) => res.json(data))
-      .catch((err) => {
-        console.log(err);
-        res.json(err);
+  app.get("/api/workouts/range", (req, res) => {
+    Workout.aggregate([
+      {
+        $addFields: {
+          totalDuration: {
+            $sum: "$exercises.duration",
+          },
+        },
+      },
+    ])
+      .sort({ _id: -1 })
+      .limit(7)
+      .then((workouts) => {
+        res.json(workouts);
       });
   });
 };
