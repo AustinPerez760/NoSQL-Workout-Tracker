@@ -23,13 +23,26 @@ module.exports = function (app) {
   //     });
   // });
 
-  app.get("/api/workouts", function (req, res) {
+  app.get("/api/workouts", (req, res) => {
     Workout.find()
       .then((data) => {
         res.json(data);
       })
       .catch((err) => {
         res.json(err);
+      });
+  });
+
+  app.put("/api/workouts/:id", (req, res) => {
+    Workout.findByIdAndUpdate(req.params.id, {
+      $push: { exercises: req.body },
+    })
+      .then((result) => {
+        console.log(result);
+        res.json(result);
+      })
+      .catch((err) => {
+        res.status(400).json(err);
       });
   });
 
