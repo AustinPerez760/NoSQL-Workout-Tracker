@@ -14,16 +14,18 @@ app.use(express.json());
 app.use(express.static("public"));
 
 //connection to workoutsdb
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workouts", {
-  useNewUrlParser: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
+  .then(() => console.log("mongodb connected"));
 
 //routes
-app.use(require("./routes/api-routes.js"));
-app.use(require("./routes/html-routes.js"));
+require("./routes/api-routes.js")(app);
+require("./routes/html-routes.js")(app);
 
 //server start
 app.listen(PORT, () => {

@@ -25,13 +25,22 @@ const WorkoutSchema = new Schema({
         type: Number,
         required: "Duration of excersise is required",
       },
-      distance: Number,
-      weight: Number,
-      reps: Number,
-      setes: Number,
+      distance: {
+        type: Number,
+      },
+
+      weight: {
+        type: Number,
+      },
+      reps: {
+        type: Number,
+      },
+      sets: {
+        type: Number,
+      },
     },
   ],
 });
 
-const workout = mongoose.model("Workout", WorkoutSchema);
-module.exports = workout;
+const Workout = mongoose.model("Workout", WorkoutSchema);
+module.exports = Workout;
