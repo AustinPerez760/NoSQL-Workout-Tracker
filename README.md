@@ -1,2 +1,5 @@
 # NoSQL-Workout-Tracker
-Workout tracking app using MongoDB
+
+![](workoutDash.png)
+
+## Table of Contents
